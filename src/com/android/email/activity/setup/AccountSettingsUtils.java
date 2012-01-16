@@ -74,6 +74,12 @@ public class AccountSettingsUtils {
         cv.put(AccountColumns.FLAGS, account.mFlags);
         cv.put(AccountColumns.SYNC_LOOKBACK, account.mSyncLookback);
         cv.put(AccountColumns.SECURITY_SYNC_KEY, account.mSecuritySyncKey);
+        // Tranq
+        cv.put(AccountColumns.NOTIFICATION_LED_COLOR, account.mNotificationLedColor);
+        cv.put(AccountColumns.NOTIFICATION_LED_ON_MS, account.mNotificationLedOnMs);
+        cv.put(AccountColumns.NOTIFICATION_LED_OFF_MS, account.mNotificationLedOffMs);
+        //
+        
         return cv;
     }
 

@@ -106,6 +106,30 @@
             android:title="@string/account_settings_ringtone"
             android:ringtoneType="notification"
             android:defaultValue="content://settings/system/notification_sound" />
+            
+            
+	<com.android.email.ColorPickerPreference 
+						android:layout="?android:attr/preferenceLayoutChild"
+	    				android:dependency="account_notify"
+						android:key="email_led_color"
+						android:title="Led Notification Color"
+						android:summary="Color for notification led"
+						android:defaultValue="#ff00ff00" 
+						alphaSlider="false" /> 
+   				
+	<Preference 		android:layout="?android:attr/preferenceLayoutChild"
+    					android:dependency="account_notify"
+						android:key="email_led_on_ms"
+						android:title="Led On Milliseconds"
+						android:summary="Number of milliseconds led is on"
+						android:defaultValue="100" />	
+		
+	<Preference 		android:layout="?android:attr/preferenceLayoutChild"
+    					android:dependency="account_notify"
+						android:key="email_led_off_ms"
+						android:title="Led Off Milliseconds"
+						android:summary="Number of milliseconds led is off"
+						android:defaultValue="100" />	
 
         <ListPreference
             android:key="account_settings_vibrate_when"

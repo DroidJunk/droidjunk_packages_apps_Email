@@ -615,7 +615,12 @@ public class EmailProvider extends ContentProvider {
             + AccountColumns.SIGNATURE + " text, "
             + AccountColumns.POLICY_KEY + " integer, "
             + AccountColumns.NOTIFIED_MESSAGE_ID + " integer, "
-            + AccountColumns.NOTIFIED_MESSAGE_COUNT + " integer"
+            + AccountColumns.NOTIFIED_MESSAGE_COUNT + " integer, "
+            // Tranq
+            + AccountColumns.NOTIFICATION_LED_COLOR + " integer, "
+            + AccountColumns.NOTIFICATION_LED_ON_MS + " integer, "
+            + AccountColumns.NOTIFICATION_LED_OFF_MS + " integer"
+            //
             + ");";
         db.execSQL("create table " + Account.TABLE_NAME + s);
         // Deleting an account deletes associated Mailboxes and HostAuth's

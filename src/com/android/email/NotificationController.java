@@ -25,6 +25,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -34,6 +35,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
+import android.preference.PreferenceManager;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,6 +44,7 @@ import com.android.email.activity.ContactStatusLoader;
 import com.android.email.activity.Welcome;
 import com.android.email.activity.setup.AccountSecurity;
 import com.android.email.activity.setup.AccountSettings;
+import com.android.email.activity.setup.AccountSettingsFragment;
 import com.android.emailcommon.Logging;
 import com.android.emailcommon.mail.Address;
 import com.android.emailcommon.provider.Account;
@@ -485,7 +488,14 @@ public class NotificationController {
         final boolean vibrateWhenSilent = (flags & Account.FLAGS_VIBRATE_WHEN_SILENT) != 0;
         final boolean isRingerSilent = getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
 
-        int defaults = Notification.DEFAULT_LIGHTS;
+        // Tranq
+        //int defaults = Notification.DEFAULT_LIGHTS;
+        int defaults = Notification.FLAG_SHOW_LIGHTS;
+        builder.setLights(account.mNotificationLedColor, account.mNotificationLedOnMs, account.mNotificationLedOffMs);
+        
+   
+        //
+        
         if (vibrate || (vibrateWhenSilent && isRingerSilent)) {
             defaults |= Notification.DEFAULT_VIBRATE;
         }
