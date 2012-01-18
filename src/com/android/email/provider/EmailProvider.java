@@ -160,8 +160,9 @@ public class EmailProvider extends ContentProvider {
     // Version 26: Update IMAP accounts to add FLAG_SUPPORTS_SEARCH flag
     // Version 27: Add protocolSearchInfo to Message table
     // Version 28: Add notifiedMessageId and notifiedMessageCount to Account
+    // Version 29: Adding Custom LED options LedColor, LedOnMS and LedOffMs columns to Account
 
-    public static final int DATABASE_VERSION = 28;
+    public static final int DATABASE_VERSION = 29;
 
     // Any changes to the database format *must* include update-in-place code.
     // Original version: 2
@@ -169,6 +170,7 @@ public class EmailProvider extends ContentProvider {
     // Version 4: Database wipe required; changing AccountManager interface w/Exchange
     // Version 5: Database wipe required; changing AccountManager interface w/Exchange
     // Version 6: Adding Body.mIntroText column
+   
     public static final int BODY_DATABASE_VERSION = 6;
 
     private static final int ACCOUNT_BASE = 0;
@@ -791,6 +793,8 @@ public class EmailProvider extends ContentProvider {
         }
     }
 
+   
+    
     private SQLiteDatabase mDatabase;
     private SQLiteDatabase mBodyDatabase;
 
@@ -1058,7 +1062,7 @@ public class EmailProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            upgradeBodyTable(db, oldVersion, newVersion);
+            upgradeBodyTable(db, oldVersion, newVersion);           
         }
 
         @Override
@@ -1072,6 +1076,10 @@ public class EmailProvider extends ContentProvider {
         DatabaseHelper(Context context, String name) {
             super(context, name, null, DATABASE_VERSION);
             mContext = context;
+            
+           
+            
+            
         }
 
         @Override
@@ -1085,6 +1093,9 @@ public class EmailProvider extends ContentProvider {
             createAccountTable(db);
             createPolicyTable(db);
             createQuickResponseTable(db);
+           
+            
+            
         }
 
         @Override
@@ -1346,11 +1357,26 @@ public class EmailProvider extends ContentProvider {
                             + " add column " + Account.NOTIFIED_MESSAGE_COUNT + " integer;");
                 } catch (SQLException e) {
                     // Shouldn't be needed unless we're debugging and interrupt the process
-                    Log.w(TAG, "Exception upgrading EmailProvider.db from 27 to 27 " + e);
+                    Log.w(TAG, "Exception upgrading EmailProvider.db from 27 to 28 " + e);
                 }
                 oldVersion = 28;
             }
-        }
+                if (oldVersion == 28) {
+                    try {
+                    	db.execSQL("alter table " + Account.TABLE_NAME
+                    			+ " add column " + Account.NOTIFICATION_LED_COLOR + " INTEGER NOT NULL DEFAULT '-16711936';");
+                        db.execSQL("alter table " + Account.TABLE_NAME
+                                + " add column " + Account.NOTIFICATION_LED_ON_MS + " INTEGER NOT NULL DEFAULT '100';");
+                        db.execSQL("alter table " + Account.TABLE_NAME
+                                + " add column " + Account.NOTIFICATION_LED_OFF_MS + " INTEGER NOT NULL DEFAULT '100';");
+                    } catch (SQLException e) {
+                        // Shouldn't be needed unless we're debugging and interrupt the process
+                        Log.w(TAG, "Exception upgrading EmailProvider.db from 28 to 29 " + e);
+                    }
+                    oldVersion = 29;
+                }
+            }
+        
 
         @Override
         public void onOpen(SQLiteDatabase db) {
@@ -1724,6 +1750,7 @@ public class EmailProvider extends ContentProvider {
             Log.w(TAG, "Deleting orphaned EmailProviderBody database...");
             bodyFile.delete();
         }
+        
     }
 
     @Override
@@ -2093,6 +2120,7 @@ public class EmailProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // Handle this special case the fastest possible way
+    	
         if (uri == INTEGRITY_CHECK_URI) {
             checkDatabases();
             return 0;

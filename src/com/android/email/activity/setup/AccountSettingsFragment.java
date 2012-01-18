@@ -578,6 +578,7 @@ public class AccountSettingsFragment extends PreferenceFragment {
         mEmailLedOnMs = (Preference) findPreference(EMAIL_LED_ON_MS);
         mEmailLedOffMs = (Preference) findPreference(EMAIL_LED_OFF_MS);        
         //
+    
 
         EmailLedColor = mAccount.getLedColor();
         EmailLedOnMs = mAccount.getLedOnMs();
@@ -586,16 +587,17 @@ public class AccountSettingsFragment extends PreferenceFragment {
         SharedPreferences.Editor editor =
                 PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext()).edit();
         editor.putInt(EMAIL_LED_COLOR, EmailLedColor);
+        editor.putInt(EMAIL_LED_ON_MS, EmailLedOnMs);
+        editor.putInt(EMAIL_LED_OFF_MS, EmailLedOffMs);
         editor.apply();     
+        
+        
+        EmailLedColor = prefs.getInt(EMAIL_LED_COLOR, 0xff00ff00);
+   		EmailLedOnMs = prefs.getInt(EMAIL_LED_ON_MS, 100);
+        EmailLedOffMs = prefs.getInt(EMAIL_LED_OFF_MS, 100);
+        
 
-        /*        EmailLedColor = prefs.getInt(EMAIL_LED_COLOR, 0xff00ff00);
-        EmailLedOnMs = prefs.getInt(EMAIL_LED_ON_MS, 100);
-        EmailLedOffMs = prefs.getInt(EMAIL_LED_OFF_MS, 100);*/
-        
-/*        prefs.edit().putInt(EMAIL_LED_COLOR, EmailLedColor);
-        prefs.edit().putInt(EMAIL_LED_ON_MS, EmailLedOnMs);
-        prefs.edit().putInt(EMAIL_LED_OFF_MS, EmailLedOffMs);*/
-        
+     
         mEmailLedColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 EmailLedColor = (Integer) newValue;
@@ -605,11 +607,6 @@ public class AccountSettingsFragment extends PreferenceFragment {
             }
         });
        
-        
-        
-        
-        
-        
         
         // Hide the outgoing account setup link if it's not activated
         Preference prefOutgoing = findPreference(PREFERENCE_OUTGOING);
@@ -686,9 +683,7 @@ public class AccountSettingsFragment extends PreferenceFragment {
             }
     };
 
-    
-    
-    
+     
     // Tranq
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
@@ -745,10 +740,8 @@ public class AccountSettingsFragment extends PreferenceFragment {
     
     //
     
-    
-    
-    
-    
+
+            
     /**
      * Called any time a preference is changed.
      */
@@ -801,24 +794,13 @@ public class AccountSettingsFragment extends PreferenceFragment {
                     mSyncEmail.isChecked());
         }
         
-        
-        
-        
-        
-        
-        
         EmailLedColor = prefs.getInt(EMAIL_LED_COLOR, 0xff00ff00);
         EmailLedOnMs = prefs.getInt(EMAIL_LED_ON_MS, 100);
         EmailLedOffMs = prefs.getInt(EMAIL_LED_OFF_MS, 100);
-        
-        
-        
+       
         mAccount.setLedColor(EmailLedColor);
         mAccount.setLedOnMs(EmailLedOnMs);
         mAccount.setLedOffMs(EmailLedOffMs);
-
-
-        
         
         // Commit the changes
         // Note, this is done in the UI thread because at this point, we must commit

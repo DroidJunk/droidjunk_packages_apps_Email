@@ -131,9 +131,9 @@ public final class Account extends EmailContent implements AccountColumns, Parce
     public int mNotifiedMessageCount;
     
     // Tranq
-    public int mNotificationLedColor;
-    public int mNotificationLedOnMs;
-    public int mNotificationLedOffMs;
+    public int mNotificationLedColor = 0xff00ff00;
+    public int mNotificationLedOnMs = 100;
+    public int mNotificationLedOffMs = 100;
     //
     
 

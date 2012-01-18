@@ -447,7 +447,7 @@ public class AccountSettings extends PreferenceActivity {
                 int index = 0;
                 int headerCount = c.getCount();
                 result = new Header[headerCount];
-
+   
                 while (c.moveToNext()) {
                     long accountId = c.getLong(Account.CONTENT_ID_COLUMN);
                     if (accountId == deletingAccountId) {
