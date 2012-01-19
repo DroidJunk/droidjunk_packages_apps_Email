@@ -16,6 +16,8 @@
 
 package com.android.email.activity.setup;
 
+import java.text.DecimalFormat;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -593,8 +595,8 @@ public class AccountSettingsFragment extends PreferenceFragment {
         
         
         EmailLedColor = prefs.getInt(EMAIL_LED_COLOR, 0xff00ff00);
-   		EmailLedOnMs = prefs.getInt(EMAIL_LED_ON_MS, 100);
-        EmailLedOffMs = prefs.getInt(EMAIL_LED_OFF_MS, 100);
+   		EmailLedOnMs = prefs.getInt(EMAIL_LED_ON_MS, 10);
+        EmailLedOffMs = prefs.getInt(EMAIL_LED_OFF_MS, 10);
         
 
      
@@ -692,15 +694,15 @@ public class AccountSettingsFragment extends PreferenceFragment {
             new NumberPickerDialog(preferenceScreen.getContext(),
                     mEmailLedOnListener,
                     EmailLedOnMs,
-                    10,
-                    500,
+                    1,
+                    50,
                     R.string.email_led_on_ms).show();
         } else if (preference == mEmailLedOffMs) {
             new NumberPickerDialog(preferenceScreen.getContext(),
             		mEmailLedOffListener,
                     EmailLedOffMs,
-                    10,
-                    500,
+                    1,
+                    50,
                     R.string.email_led_off_ms).show();
         }
 
@@ -719,6 +721,10 @@ public class AccountSettingsFragment extends PreferenceFragment {
                   
                     EmailLedOnMs = limit;
                     mAccount.setLedOnMs(limit);
+                    DecimalFormat numf = new DecimalFormat("#.##");
+                    double mTime = ((double) (limit) / (double)(10));
+                    mEmailLedOnMs.setSummary(numf.format(mTime)+ " seconds");
+                    
                     saveSettings();
                 }
         };
@@ -734,6 +740,10 @@ public class AccountSettingsFragment extends PreferenceFragment {
                     	
                         EmailLedOffMs = limit;
                         mAccount.setLedOffMs(limit);
+                        DecimalFormat numf = new DecimalFormat("#.##");
+                        double mTime = ((double) (limit) / (double)(10));
+                        mEmailLedOffMs.setSummary(numf.format(mTime)+ " seconds");
+                        
                         saveSettings();
                     }
             };    

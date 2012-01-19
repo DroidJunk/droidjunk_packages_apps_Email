@@ -491,7 +491,7 @@ public class NotificationController {
         // Tranq
         //int defaults = Notification.DEFAULT_LIGHTS;
         int defaults = Notification.FLAG_SHOW_LIGHTS;
-        builder.setLights(account.mNotificationLedColor, account.mNotificationLedOnMs, account.mNotificationLedOffMs);
+        builder.setLights(account.mNotificationLedColor, account.mNotificationLedOnMs * 100, account.mNotificationLedOffMs * 100);
         
    
         //
