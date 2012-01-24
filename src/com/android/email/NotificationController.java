@@ -198,8 +198,8 @@ public class NotificationController {
 		Notification notification = builder.getNotification();
 		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
 		notification.ledARGB = account.mNotificationLedColor;
-		notification.ledOnMS = account.mNotificationLedOnMs;
-		notification.ledOffMS = account.mNotificationLedOffMs;
+		notification.ledOnMS = account.mNotificationLedOnMs * 100;
+		notification.ledOffMS = account.mNotificationLedOffMs * 100;
 		//
 		
         return notification;
