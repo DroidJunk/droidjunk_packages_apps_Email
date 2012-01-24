@@ -189,11 +189,19 @@ public class NotificationController {
                 .setTicker(ticker)
                 .setOngoing(ongoing);
 
+
         if (enableAudio) {
             setupSoundAndVibration(builder, account);
         }
-
-        Notification notification = builder.getNotification();
+        
+        // Tranq
+		Notification notification = builder.getNotification();
+		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+		notification.ledARGB = account.mNotificationLedColor;
+		notification.ledOnMS = account.mNotificationLedOnMs;
+		notification.ledOffMS = account.mNotificationLedOffMs;
+		//
+		
         return notification;
     }
 
@@ -488,20 +496,16 @@ public class NotificationController {
         final boolean vibrateWhenSilent = (flags & Account.FLAGS_VIBRATE_WHEN_SILENT) != 0;
         final boolean isRingerSilent = getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
 
-        // Tranq
-        //int defaults = Notification.DEFAULT_LIGHTS;
-        int defaults = Notification.FLAG_SHOW_LIGHTS;
-        builder.setLights(account.mNotificationLedColor, account.mNotificationLedOnMs * 100, account.mNotificationLedOffMs * 100);
-        
-   
-        //
+        //int defaults = Notification.DEFAULT_LIGHTS; - Tranq
         
         if (vibrate || (vibrateWhenSilent && isRingerSilent)) {
-            defaults |= Notification.DEFAULT_VIBRATE;
+            //defaults |= Notification.DEFAULT_VIBRATE;  - Tranq
+        	
+            builder.setDefaults(Notification.DEFAULT_VIBRATE);  // Tranq
         }
 
-        builder.setSound((ringtoneUri == null) ? null : Uri.parse(ringtoneUri))
-            .setDefaults(defaults);
+        builder.setSound((ringtoneUri == null) ? null : Uri.parse(ringtoneUri));
+            //.setDefaults(defaults);  -- Tranq
     }
 
     /**
