@@ -79,6 +79,8 @@
     <!-- Menu item/button name -->
     <string name="unread_action">Mark unread</string>
     <!-- Menu item/button name -->
+    <string name="mark_all_read_action">Mark All Read</string>
+    <!-- Menu item/button name -->
     <string name="set_star_action">Add star</string>
     <!-- Menu item/button name -->
     <string name="remove_star_action">Remove star</string>
