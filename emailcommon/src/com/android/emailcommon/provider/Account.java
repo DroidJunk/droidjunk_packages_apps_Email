@@ -129,6 +129,13 @@ public final class Account extends EmailContent implements AccountColumns, Parce
     public long mPolicyKey;
     public long mNotifiedMessageId;
     public int mNotifiedMessageCount;
+    
+    // Tranq
+    public int mNotificationLedColor = 0xff00ff00;
+    public int mNotificationLedOnMs = 100;
+    public int mNotificationLedOffMs = 100;
+    //
+    
 
     // Convenience for creating/working with an account
     public transient HostAuth mHostAuthRecv;
@@ -157,7 +164,13 @@ public final class Account extends EmailContent implements AccountColumns, Parce
     public static final int CONTENT_POLICY_KEY = 17;
     public static final int CONTENT_NOTIFIED_MESSAGE_ID = 18;
     public static final int CONTENT_NOTIFIED_MESSAGE_COUNT = 19;
-
+    
+    // New Tranq settings
+    public static final int CONTENT_NOTIFICATION_LED_COLOR = 20;
+    public static final int CONTENT_NOTIFICATION_LED_ON_MS = 21;
+    public static final int CONTENT_NOTIFICATION_LED_OFF_MS = 22;
+    //
+    
     public static final String[] CONTENT_PROJECTION = new String[] {
         RECORD_ID, AccountColumns.DISPLAY_NAME,
         AccountColumns.EMAIL_ADDRESS, AccountColumns.SYNC_KEY, AccountColumns.SYNC_LOOKBACK,
@@ -167,7 +180,9 @@ public final class Account extends EmailContent implements AccountColumns, Parce
         AccountColumns.RINGTONE_URI, AccountColumns.PROTOCOL_VERSION,
         AccountColumns.NEW_MESSAGE_COUNT, AccountColumns.SECURITY_SYNC_KEY,
         AccountColumns.SIGNATURE, AccountColumns.POLICY_KEY,
-        AccountColumns.NOTIFIED_MESSAGE_ID, AccountColumns.NOTIFIED_MESSAGE_COUNT
+        AccountColumns.NOTIFIED_MESSAGE_ID, AccountColumns.NOTIFIED_MESSAGE_COUNT,
+        AccountColumns.NOTIFICATION_LED_COLOR, AccountColumns.NOTIFICATION_LED_ON_MS,
+        AccountColumns.NOTIFICATION_LED_OFF_MS
     };
 
     public static final int CONTENT_MAILBOX_TYPE_COLUMN = 1;
@@ -274,11 +289,70 @@ public final class Account extends EmailContent implements AccountColumns, Parce
         mPolicyKey = cursor.getLong(CONTENT_POLICY_KEY);
         mNotifiedMessageId = cursor.getLong(CONTENT_NOTIFIED_MESSAGE_ID);
         mNotifiedMessageCount = cursor.getInt(CONTENT_NOTIFIED_MESSAGE_COUNT);
+
+        // Tranq
+        mNotificationLedColor = cursor.getInt(CONTENT_NOTIFICATION_LED_COLOR);
+        mNotificationLedOnMs = cursor.getInt(CONTENT_NOTIFICATION_LED_ON_MS);
+        mNotificationLedOffMs = cursor.getInt(CONTENT_NOTIFICATION_LED_OFF_MS);
+        //
     }
 
     private long getId(Uri u) {
         return Long.parseLong(u.getPathSegments().get(1));
     }
+    
+    
+    
+    
+    /**
+     * @return the led color for the account
+     */
+    public int getLedColor() {
+        return mNotificationLedColor;
+    }
+
+    /**
+     * Set the led color  Be sure to call save() to commit to database.
+     * @param description the new description
+     */
+    public void setLedColor(int color) {
+    	mNotificationLedColor = color;
+    }    
+    
+ 
+    /**
+     * @return the led on milliseconds for the account
+     */
+    public int getLedOnMs() {
+        return mNotificationLedOnMs;
+    }
+
+    /**
+     * Set the led on milliseconds  Be sure to call save() to commit to database.
+     * @param description the new description
+     */
+    public void setLedOnMs(int ms) {
+    	mNotificationLedOnMs = ms;
+    }  
+    
+    /**
+     * @return the led on milliseconds for the account
+     */
+    public int getLedOffMs() {
+        return mNotificationLedOffMs;
+    }
+
+    /**
+     * Set the led on milliseconds  Be sure to call save() to commit to database.
+     * @param description the new description
+     */
+    public void setLedOffMs(int ms) {
+    	mNotificationLedOffMs = ms;
+    }      
+    
+    
+    
+    
 
     /**
      * @return the user-visible name for the account
@@ -873,6 +947,13 @@ public final class Account extends EmailContent implements AccountColumns, Parce
         values.put(AccountColumns.POLICY_KEY, mPolicyKey);
         values.put(AccountColumns.NOTIFIED_MESSAGE_ID, mNotifiedMessageId);
         values.put(AccountColumns.NOTIFIED_MESSAGE_COUNT, mNotifiedMessageCount);
+        
+        // Tranq
+        values.put(AccountColumns.NOTIFICATION_LED_COLOR, mNotificationLedColor);
+        values.put(AccountColumns.NOTIFICATION_LED_ON_MS, mNotificationLedOnMs);
+        values.put(AccountColumns.NOTIFICATION_LED_OFF_MS, mNotificationLedOffMs);
+        //
+        
         return values;
     }
 
@@ -926,6 +1007,13 @@ public final class Account extends EmailContent implements AccountColumns, Parce
         dest.writeLong(mPolicyKey);
         dest.writeLong(mNotifiedMessageId);
         dest.writeInt(mNotifiedMessageCount);
+        
+        // Tranq
+        dest.writeInt(mNotificationLedColor);
+        dest.writeInt(mNotificationLedOnMs);
+        dest.writeInt(mNotificationLedOffMs);
+        //
+        
 
         if (mHostAuthRecv != null) {
             dest.writeByte((byte)1);
@@ -968,6 +1056,15 @@ public final class Account extends EmailContent implements AccountColumns, Parce
         mNotifiedMessageId = in.readLong();
         mNotifiedMessageCount = in.readInt();
 
+        // Tranq
+        mNotificationLedColor  = in.readInt();
+        mNotificationLedOnMs = in.readInt();
+        mNotificationLedOffMs = in.readInt();
+        //
+        
+        
+        
+        
         mHostAuthRecv = null;
         if (in.readByte() == 1) {
             mHostAuthRecv = new HostAuth(in);

@@ -447,7 +447,7 @@ public class AccountSettings extends PreferenceActivity {
                 int index = 0;
                 int headerCount = c.getCount();
                 result = new Header[headerCount];
-
+   
                 while (c.moveToNext()) {
                     long accountId = c.getLong(Account.CONTENT_ID_COLUMN);
                     if (accountId == deletingAccountId) {
@@ -761,7 +761,7 @@ public class AccountSettings extends PreferenceActivity {
      * Dialog fragment to show "exit with unsaved changes?" dialog
      */
     /* package */ static class UnsavedChangesDialogFragment extends DialogFragment {
-        private final static String TAG = "UnsavedChangesDialogFragment";
+        final static String TAG = "UnsavedChangesDialogFragment";
 
         // Argument bundle keys
         private final static String BUNDLE_KEY_HEADER = "UnsavedChangesDialogFragment.Header";
