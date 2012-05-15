@@ -108,7 +108,7 @@
             android:defaultValue="content://settings/system/notification_sound" />
             
             
-	<com.android.email.ColorPickerPreference 
+	<ColorPickerPreference 
 						android:layout="?android:attr/preferenceLayoutChild"
 	    				android:dependency="account_notify"
 						android:key="email_led_color"

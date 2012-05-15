@@ -46,7 +46,6 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.email.ColorPickerPreference;
 import com.android.email.Email;
 import com.android.email.R;
 import com.android.email.mail.Sender;
@@ -96,7 +95,7 @@ public class AccountSettingsFragment extends PreferenceFragment {
     private static final String PREFERENCE_SYNC_EMAIL = "account_sync_email";
     private static final String PREFERENCE_DELETE_ACCOUNT = "delete_account";
     
-    // Tranq
+    // Junk
     public static final String EMAIL_LED_COLOR = "email_led_color";
     public static final String EMAIL_LED_ON_MS = "email_led_on_ms";
     public static final String EMAIL_LED_OFF_MS = "email_led_off_ms";
@@ -121,7 +120,7 @@ public class AccountSettingsFragment extends PreferenceFragment {
     private CheckBoxPreference mSyncCalendar;
     private CheckBoxPreference mSyncEmail;
 
-    // Tranq
+    // Junk
     private Preference mEmailLedColor;
     private Preference mEmailLedOnMs;
     private Preference mEmailLedOffMs;
@@ -574,7 +573,7 @@ public class AccountSettingsFragment extends PreferenceFragment {
 
         
         
-        // Tranq
+        // Junk
         mEmailLedColor = (Preference) findPreference(EMAIL_LED_COLOR);
         mEmailLedOnMs = (Preference) findPreference(EMAIL_LED_ON_MS);
         mEmailLedOffMs = (Preference) findPreference(EMAIL_LED_OFF_MS);        
@@ -685,7 +684,7 @@ public class AccountSettingsFragment extends PreferenceFragment {
     };
 
      
-    // Tranq
+    // Junk
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
             Preference preference) {
