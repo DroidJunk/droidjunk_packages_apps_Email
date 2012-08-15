@@ -197,6 +197,14 @@ public class NotificationController {
             setupSoundAndVibration(builder, account);
         }
 
+        // Junk
+		Notification notification = builder.getNotification();
+		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+		notification.ledARGB = account.mNotificationLedColor;
+		notification.ledOnMS = account.mNotificationLedOnMs * 50;
+		notification.ledOffMS = account.mNotificationLedOffMs * 50;
+		// End Junk
+
         return builder;
     }
 
@@ -672,13 +680,13 @@ public class NotificationController {
         final boolean vibrateWhenSilent = (flags & Account.FLAGS_VIBRATE_WHEN_SILENT) != 0;
         final boolean isRingerSilent = getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
 
-        int defaults = Notification.DEFAULT_LIGHTS;
+		// Junk
         if (vibrate || (vibrateWhenSilent && isRingerSilent)) {
-            defaults |= Notification.DEFAULT_VIBRATE;
+            builder.setDefaults(Notification.DEFAULT_VIBRATE);
         }
 
-        builder.setSound((ringtoneUri == null) ? null : Uri.parse(ringtoneUri))
-            .setDefaults(defaults);
+        builder.setSound((ringtoneUri == null) ? null : Uri.parse(ringtoneUri));
+		// End Junk
     }
 
     /**

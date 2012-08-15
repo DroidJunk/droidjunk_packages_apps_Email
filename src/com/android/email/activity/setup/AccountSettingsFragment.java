@@ -36,6 +36,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
@@ -87,6 +88,12 @@ public class AccountSettingsFragment extends PreferenceFragment {
     private static final String PREFERENCE_SYNC_CALENDAR = "account_sync_calendar";
     private static final String PREFERENCE_SYNC_EMAIL = "account_sync_email";
     private static final String PREFERENCE_DELETE_ACCOUNT = "delete_account";
+    
+    // Junk
+    private static final String EMAIL_LED_COLOR = "email_led_color";
+    private static final String EMAIL_LED_ON_MS = "email_led_on_ms";
+    private static final String EMAIL_LED_OFF_MS = "email_led_off_ms";
+    // End Junk
 
     // These strings must match account_settings_vibrate_when_* strings in strings.xml
     private static final String PREFERENCE_VALUE_VIBRATE_WHEN_ALWAYS = "always";
@@ -107,6 +114,15 @@ public class AccountSettingsFragment extends PreferenceFragment {
     private CheckBoxPreference mSyncCalendar;
     private CheckBoxPreference mSyncEmail;
 
+    // Junk
+    private Preference mEmailLedColor;
+    private Preference mEmailLedOnMs;
+    private Preference mEmailLedOffMs;
+    private static int EmailLedColor;
+    private static int EmailLedOnMs;
+    private static int EmailLedOffMs;
+    // End Junk
+    
     private Context mContext;
     private Account mAccount;
     private boolean mAccountDirty;
@@ -548,6 +564,59 @@ public class AccountSettingsFragment extends PreferenceFragment {
                     }
                 });
 
+        
+        
+        // Junk
+        mEmailLedColor = (Preference) findPreference(EMAIL_LED_COLOR);
+        mEmailLedOnMs = (Preference) findPreference(EMAIL_LED_ON_MS);
+        mEmailLedOffMs = (Preference) findPreference(EMAIL_LED_OFF_MS);        
+
+        EmailLedColor = mAccount.getLedColor();
+        EmailLedOnMs = mAccount.getLedOnMs();
+        EmailLedOffMs = mAccount.getLedOffMs();
+        
+        SharedPreferences.Editor editor =
+                PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext()).edit();
+        editor.putInt(EMAIL_LED_COLOR, EmailLedColor);
+        editor.putInt(EMAIL_LED_ON_MS, EmailLedOnMs);
+        editor.putInt(EMAIL_LED_OFF_MS, EmailLedOffMs);
+        editor.apply();     
+        
+        EmailLedColor = prefs.getInt(EMAIL_LED_COLOR, 0xff00ff00);
+   		EmailLedOnMs = prefs.getInt(EMAIL_LED_ON_MS, 10);
+        EmailLedOffMs = prefs.getInt(EMAIL_LED_OFF_MS, 10);
+
+     
+        mEmailLedColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                EmailLedColor = (Integer) newValue;
+                mAccount.setLedColor(EmailLedColor);
+                saveSettings();
+                return false;
+            }
+        });
+        
+        mEmailLedOnMs.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                EmailLedOnMs = (Integer) newValue;
+                mAccount.setLedOnMs(EmailLedOnMs);
+                saveSettings();
+                return false;
+            }
+        });
+        
+        mEmailLedOffMs.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                EmailLedOffMs = (Integer) newValue;
+                mAccount.setLedOffMs(EmailLedOffMs);
+                saveSettings();
+                return false;
+            }
+        });
+        
+        
+		// End Junk
+        
         // Hide the outgoing account setup link if it's not activated
         Preference prefOutgoing = findPreference(PREFERENCE_OUTGOING);
         boolean showOutgoing = true;
@@ -623,6 +692,9 @@ public class AccountSettingsFragment extends PreferenceFragment {
             }
     };
 
+     
+
+            
     /**
      * Called any time a preference is changed.
      */
@@ -674,6 +746,16 @@ public class AccountSettingsFragment extends PreferenceFragment {
             ContentResolver.setSyncAutomatically(acct, EmailContent.AUTHORITY,
                     mSyncEmail.isChecked());
         }
+
+        // Junk
+        EmailLedColor = prefs.getInt(EMAIL_LED_COLOR, 0xff00ff00);
+        EmailLedOnMs = prefs.getInt(EMAIL_LED_ON_MS, 50);
+        EmailLedOffMs = prefs.getInt(EMAIL_LED_OFF_MS, 50);
+       
+        mAccount.setLedColor(EmailLedColor);
+        mAccount.setLedOnMs(EmailLedOnMs);
+        mAccount.setLedOffMs(EmailLedOffMs);
+        // End Junk
 
         // Commit the changes
         // Note, this is done in the UI thread because at this point, we must commit
