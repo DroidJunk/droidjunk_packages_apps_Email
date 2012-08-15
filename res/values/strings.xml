@@ -1232,4 +1232,14 @@ as <xliff:g id="filename">%s</xliff:g>.</string>
     <!-- This is the message warning the user that they must sync manually when roaming. [CHAR LIMIT=none]-->
     <string name="require_manual_sync_message">Background sync for this account is disabled while\
      roaming.</string>
+     
+	<!-- ******* JUNK ******* -->
+    
+    <string name="email_led_on_ms">Led On Seconds (10ths)</string>
+    <string name="email_led_off_ms">Led Off Seconds (10ths)</string>
+    
+	<!-- ******************** -->
+    
+    
+    
 </resources>

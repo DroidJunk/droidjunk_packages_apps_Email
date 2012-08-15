@@ -117,14 +117,14 @@
 			android:defaultValue="#ff00ff00" 
 			alphaSlider="false" /> 
    				
-		<DJSeekBarPreference
+		<Preference
 	 		android:layout="?android:attr/preferenceLayoutChild"
 			android:dependency="account_notify"
 			android:key="email_led_on_ms"
 			android:title="LED On Time Adjustment"
 			android:defaultValue="3" />	
 		
-		<DJSeekBarPreference 		
+		<Preference 		
 			android:layout="?android:attr/preferenceLayoutChild"
     		android:dependency="account_notify"
 			android:key="email_led_off_ms"
