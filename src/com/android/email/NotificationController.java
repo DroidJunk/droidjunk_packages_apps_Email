@@ -196,13 +196,9 @@ public class NotificationController {
         if (enableAudio) {
             setupSoundAndVibration(builder, account);
         }
-
         // Junk
-		Notification notification = builder.getNotification();
-		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
-		notification.ledARGB = account.mNotificationLedColor;
-		notification.ledOnMS = account.mNotificationLedOnMs * 50;
-		notification.ledOffMS = account.mNotificationLedOffMs * 50;
+        builder.setLights(account.mNotificationLedColor,
+        		account.mNotificationLedOnMs * 50, account.mNotificationLedOffMs * 50);
 		// End Junk
 
         return builder;
