@@ -183,7 +183,8 @@ public final class Account extends EmailContent implements AccountColumns, Parce
         AccountColumns.SIGNATURE, AccountColumns.POLICY_KEY,
         AccountColumns.NOTIFIED_MESSAGE_ID, AccountColumns.NOTIFIED_MESSAGE_COUNT,
 		// Junk
-        AccountColumns.NOTIFICATION_LED_COLOR, AccountColumns.NOTIFICATION_LED_ON_MS,
+        AccountColumns.NOTIFICATION_LED_COLOR, 
+        AccountColumns.NOTIFICATION_LED_ON_MS,
         AccountColumns.NOTIFICATION_LED_OFF_MS
 		// End Junk
     };

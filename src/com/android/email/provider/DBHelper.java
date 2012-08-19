@@ -319,7 +319,7 @@ public final class DBHelper {
             + AccountColumns.SIGNATURE + " text, "
             + AccountColumns.POLICY_KEY + " integer, "
             + AccountColumns.NOTIFIED_MESSAGE_ID + " integer, "
-            + AccountColumns.NOTIFIED_MESSAGE_COUNT + " integer"
+            + AccountColumns.NOTIFIED_MESSAGE_COUNT + " integer, "
             // Junk
             + AccountColumns.NOTIFICATION_LED_COLOR + " integer, "
             + AccountColumns.NOTIFICATION_LED_ON_MS + " integer, "
@@ -941,12 +941,12 @@ public final class DBHelper {
                 	db.execSQL("alter table " + Account.TABLE_NAME
                 			+ " add column " + Account.NOTIFICATION_LED_COLOR + " INTEGER NOT NULL DEFAULT '-16711936';");
                     db.execSQL("alter table " + Account.TABLE_NAME
-                            + " add column " + Account.NOTIFICATION_LED_ON_MS + " INTEGER NOT NULL DEFAULT '100';");
+                            + " add column " + Account.NOTIFICATION_LED_ON_MS + " INTEGER NOT NULL DEFAULT '50';");
                     db.execSQL("alter table " + Account.TABLE_NAME
-                            + " add column " + Account.NOTIFICATION_LED_OFF_MS + " INTEGER NOT NULL DEFAULT '100';");
+                            + " add column " + Account.NOTIFICATION_LED_OFF_MS + " INTEGER NOT NULL DEFAULT '50';");
                 } catch (SQLException e) {
                     // Shouldn't be needed unless we're debugging and interrupt the process
-                    Log.w(TAG, "Exception upgrading EmailProvider.db from 38 to 39 " + e);
+                    Log.w(TAG, "Exception upgrading EmailProvider.db from 39 to 40 " + e);
                 }
                 oldVersion = 40;
             }
