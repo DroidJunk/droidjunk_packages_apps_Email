@@ -16,6 +16,8 @@
 
 package com.android.email.activity.setup;
 
+import java.text.DecimalFormat;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -36,12 +38,15 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.email.Email;
+import com.android.email.NumberPickerDialog;
 import com.android.email.R;
 import com.android.email.mail.Sender;
 import com.android.emailcommon.AccountManagerTypes;
@@ -52,6 +57,8 @@ import com.android.emailcommon.provider.Account;
 import com.android.emailcommon.provider.EmailContent;
 import com.android.emailcommon.provider.HostAuth;
 import com.android.emailcommon.utility.Utility;
+
+
 
 /**
  * Fragment containing the main logic for account settings.  This also calls out to other
@@ -88,6 +95,12 @@ public class AccountSettingsFragment extends PreferenceFragment {
     private static final String PREFERENCE_SYNC_CALENDAR = "account_sync_calendar";
     private static final String PREFERENCE_SYNC_EMAIL = "account_sync_email";
     private static final String PREFERENCE_DELETE_ACCOUNT = "delete_account";
+    
+    // Junk
+    private static final String EMAIL_LED_COLOR = "email_led_color";
+    private static final String EMAIL_LED_ON_MS = "email_led_on_ms";
+    private static final String EMAIL_LED_OFF_MS = "email_led_off_ms";
+    // End Junk
 
     private EditTextPreference mAccountDescription;
     private EditTextPreference mAccountName;
@@ -103,6 +116,15 @@ public class AccountSettingsFragment extends PreferenceFragment {
     private CheckBoxPreference mSyncCalendar;
     private CheckBoxPreference mSyncEmail;
 
+    // Junk
+    private Preference mEmailLedColor;
+    private Preference mEmailLedOnMs;
+    private Preference mEmailLedOffMs;
+    private static int EmailLedColor;
+    private static int EmailLedOnMs;
+    private static int EmailLedOffMs;
+    // End Junk
+    
     private Context mContext;
     private Account mAccount;
     private boolean mAccountDirty;
@@ -548,6 +570,61 @@ public class AccountSettingsFragment extends PreferenceFragment {
                     }
                 });
 
+        
+        
+        // Junk
+        mEmailLedColor = (Preference) findPreference(EMAIL_LED_COLOR);
+        mEmailLedOnMs = (Preference) findPreference(EMAIL_LED_ON_MS);
+        mEmailLedOffMs = (Preference) findPreference(EMAIL_LED_OFF_MS);  
+
+        
+
+        EmailLedColor = mAccount.getLedColor();
+        EmailLedOnMs = mAccount.getLedOnMs();
+        EmailLedOffMs = mAccount.getLedOffMs();
+        
+        SharedPreferences.Editor editor =
+                PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext()).edit();
+        editor.putInt(EMAIL_LED_COLOR, EmailLedColor);
+        editor.putInt(EMAIL_LED_ON_MS, EmailLedOnMs);
+        editor.putInt(EMAIL_LED_OFF_MS, EmailLedOffMs);
+        editor.apply();     
+        
+        EmailLedColor = prefs.getInt(EMAIL_LED_COLOR, 0xff00ff00);
+   		EmailLedOnMs = prefs.getInt(EMAIL_LED_ON_MS, 10);
+        EmailLedOffMs = prefs.getInt(EMAIL_LED_OFF_MS, 10);
+
+     
+        mEmailLedColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                EmailLedColor = (Integer) newValue;
+                mAccount.setLedColor(EmailLedColor);
+                saveSettings();
+                return false;
+            }
+        });
+        
+        mEmailLedOnMs.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                EmailLedOnMs = (Integer) newValue;
+                mAccount.setLedOnMs(EmailLedOnMs);
+                saveSettings();
+                return false;
+            }
+        });
+        
+        mEmailLedOffMs.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                EmailLedOffMs = (Integer) newValue;
+                mAccount.setLedOffMs(EmailLedOffMs);
+                saveSettings();
+                return false;
+            }
+        });
+        
+        
+		// End Junk
+        
         // Hide the outgoing account setup link if it's not activated
         Preference prefOutgoing = findPreference(PREFERENCE_OUTGOING);
         boolean showOutgoing = true;
@@ -623,6 +700,60 @@ public class AccountSettingsFragment extends PreferenceFragment {
             }
     };
 
+     
+    // Junk
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
+            Preference preference) {
+        if (preference == mEmailLedOnMs) {
+            new NumberPickerDialog(preferenceScreen.getContext(),
+                    mEmailLedOnListener,
+                    EmailLedOnMs,
+                    0,
+                    50,
+                    R.string.email_led_on_ms).show();
+        } else if (preference == mEmailLedOffMs) {
+            new NumberPickerDialog(preferenceScreen.getContext(),
+            		mEmailLedOffListener,
+                    EmailLedOffMs,
+                    0,
+                    50,
+                    R.string.email_led_off_ms).show();
+        }
+
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
+    }    
+    
+
+    NumberPickerDialog.OnNumberSetListener mEmailLedOnListener =
+            new NumberPickerDialog.OnNumberSetListener() {
+                public void onNumberSet(int limit) {
+                    SharedPreferences.Editor editor =
+                            PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext()).edit();
+                    editor.putInt(EMAIL_LED_ON_MS, limit);
+                    editor.apply();
+                    EmailLedOnMs = limit;
+                    mAccount.setLedOnMs(limit);
+                    saveSettings();
+                }
+        };
+    
+        NumberPickerDialog.OnNumberSetListener mEmailLedOffListener =
+                new NumberPickerDialog.OnNumberSetListener() {
+                    public void onNumberSet(int limit) {
+                        SharedPreferences.Editor editor =
+                                PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext()).edit();
+
+                        editor.putInt(EMAIL_LED_OFF_MS, limit);
+                        editor.apply();
+                        EmailLedOffMs = limit;
+                        mAccount.setLedOffMs(limit);
+                        saveSettings();
+                    }
+            };    
+    
+    //
+            
     /**
      * Called any time a preference is changed.
      */
@@ -672,6 +803,16 @@ public class AccountSettingsFragment extends PreferenceFragment {
             ContentResolver.setSyncAutomatically(acct, EmailContent.AUTHORITY,
                     mSyncEmail.isChecked());
         }
+
+        // Junk
+        EmailLedColor = prefs.getInt(EMAIL_LED_COLOR, 0xff00ff00);
+        EmailLedOnMs = prefs.getInt(EMAIL_LED_ON_MS, 50);
+        EmailLedOffMs = prefs.getInt(EMAIL_LED_OFF_MS, 50);
+       
+        mAccount.setLedColor(EmailLedColor);
+        mAccount.setLedOnMs(EmailLedOnMs);
+        mAccount.setLedOffMs(EmailLedOffMs);
+        // End Junk
 
         // Commit the changes
         // Note, this is done in the UI thread because at this point, we must commit

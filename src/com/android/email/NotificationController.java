@@ -196,6 +196,10 @@ public class NotificationController {
         if (enableAudio) {
             setupSoundAndVibration(builder, account);
         }
+        // Junk
+        builder.setLights(account.mNotificationLedColor,
+        		account.mNotificationLedOnMs * 50, account.mNotificationLedOffMs * 50);
+		// End Junk
 
         return builder;
     }
@@ -669,7 +673,6 @@ public class NotificationController {
         final int flags = account.mFlags;
         final String ringtoneUri = account.mRingtoneUri;
         final boolean vibrate = (flags & Account.FLAGS_VIBRATE) != 0;
-
         int defaults = Notification.DEFAULT_LIGHTS;
         if (vibrate) {
             defaults |= Notification.DEFAULT_VIBRATE;

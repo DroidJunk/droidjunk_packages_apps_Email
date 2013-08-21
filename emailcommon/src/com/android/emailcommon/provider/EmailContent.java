@@ -1442,6 +1442,11 @@ public abstract class EmailContent {
         public static final String NOTIFIED_MESSAGE_ID = "notifiedMessageId";
         // For compatibility w/ Email1
         public static final String NOTIFIED_MESSAGE_COUNT = "notifiedMessageCount";
+        // Junk
+        public static final String NOTIFICATION_LED_COLOR = "notificationLedColor";
+        public static final String NOTIFICATION_LED_ON_MS = "notificationLedOnMs";
+        public static final String NOTIFICATION_LED_OFF_MS = "notificationLedOffMs";
+        // End Junk
     }
 
     public interface QuickResponseColumns {
