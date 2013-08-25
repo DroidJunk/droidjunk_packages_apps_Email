@@ -218,7 +218,7 @@ public class NotificationController {
             String contentText, Intent intent, int notificationId) {
         Notification.Builder builder = createBaseAccountNotificationBuilder(account, ticker, title,
                 contentText, intent, null, null, true, needsOngoingNotification(notificationId));
-        mNotificationManager.notify(notificationId, builder.getNotification());
+        mNotificationManager.notify(notificationId, builder.build());
     }
 
     /**
@@ -526,7 +526,7 @@ public class NotificationController {
         }
 
         mLastMessageNotifyTime = now;
-        return builder.getNotification();
+        return builder.build();
     }
 
     /**
@@ -673,7 +673,10 @@ public class NotificationController {
         final int flags = account.mFlags;
         final String ringtoneUri = account.mRingtoneUri;
         final boolean vibrate = (flags & Account.FLAGS_VIBRATE) != 0;
-        int defaults = Notification.DEFAULT_LIGHTS;
+        // JUNK
+        //int defaults = Notification.DEFAULT_LIGHTS;
+        int defaults = 0;
+        // END JUNK
         if (vibrate) {
             defaults |= Notification.DEFAULT_VIBRATE;
         }
