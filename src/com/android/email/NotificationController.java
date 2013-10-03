@@ -198,7 +198,7 @@ public class NotificationController {
         }
         // Junk
         builder.setLights(account.mNotificationLedColor,
-        		account.mNotificationLedOnMs * 50, account.mNotificationLedOffMs * 50);
+        		account.mNotificationLedOnMs, account.mNotificationLedOffMs);
 		// End Junk
 
         return builder;
